@@ -13,7 +13,7 @@ while true
 do
 
 # pptp connect (and if necessary reconnect)
-# set up follows
+# set up via
 # http://www.cyberciti.biz/tips/howto-configure-ubuntu-fedora-linux-pptp-client.html
 if ! ifconfig | grep -q ppp0
 then
@@ -40,6 +40,8 @@ then
 fi
 
 # email when status changes including daily update
+# installed via
+# sudo apt-get install sendmail-bin
 if [ "$STATUS" != "$PREVSTATUS" ]
 then
 	echo status change
