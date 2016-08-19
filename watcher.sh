@@ -33,6 +33,7 @@ fi
 
 # refresh each new day
 TODAY=`TZ=America/Los_Angeles date +%j`
+echo watcher: today is $TODAY, recentday is $RECENTDAY
 if [ "$TODAY" != "$RECENTDAY" ]
 then
 	STATUS="$STATUS (daily update)"
