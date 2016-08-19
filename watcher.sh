@@ -30,7 +30,6 @@ then
 else
 	STATUS="not responding"
 fi
-echo $WATCHNODE $STATUS
 
 # refresh each new day
 TODAY=`TZ=America/Los_Angeles date +%j`
@@ -39,12 +38,14 @@ then
 	STATUS="$STATUS (daily update)"
 fi
 
+echo `date +"%b %d %T"` $HOSTNAME watcher: $WATCHNODE $STATUS
+
 # email when status changes including daily update
 # installed via
 # sudo apt-get install sendmail-bin
 if [ "$STATUS" != "$PREVSTATUS" ]
 then
-	echo status change
+	echo `date +"%b %d %T"` $HOSTNAME watcher: status change
 	sendmail -t -f noreply@larrylang.net <<EOM
 From: noreply@larrylang.net
 To: $WATCHEMAIL
