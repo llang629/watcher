@@ -1,12 +1,16 @@
 #!/bin/bash
 WATCHNODE=$1
 
-WATCHINTERVAL=300
+# parameters
 WATCHCONNECT=llang-pptp
 WATCHEMAIL=watcher@larrylang.net
+WATCHINTERVAL=300
+TIMEZONE="America/Los_Angeles"
 
+# initialize variables
 PREVSTATUS=="start"
-RECENTDAY=`TZ=America/Los_Angeles date +%j`
+RECENTDAY=`TZ=$TIMEZONE date +%j`
+UPDATE=""
 
 # repeat until interrupted
 while true
@@ -32,27 +36,29 @@ else
 fi
 
 # refresh each new day
-TODAY=`TZ=America/Los_Angeles date +%j`
-echo watcher: today is $TODAY, recentday is $RECENTDAY
+TODAY=`TZ=$TIMEZONE date +%j`
 if [ "$TODAY" != "$RECENTDAY" ]
 then
-	STATUS="$STATUS (daily update)"
+	UPDATE="(daily update)"
+else
+    UPDATE=""
 fi
+echo watcher: today is $TODAY, recentday is $RECENTDAY, so update is $UPDATE
 
-echo `date +"%b %d %T"` $HOSTNAME watcher: $WATCHNODE $STATUS
+echo `TZ=$TIMEZONE date +"%b %d %T"` $HOSTNAME watcher: $WATCHNODE $STATUS $UPDATE
 
-# email when status changes including daily update
+# email when status changes or daily update
 # installed via
 # sudo apt-get install sendmail-bin
-if [ "$STATUS" != "$PREVSTATUS" ]
+if [ "$STATUS" != "$PREVSTATUS" ] || [ "$UPDATE" != "" ]
 then
-	echo `date +"%b %d %T"` $HOSTNAME watcher: status change
+	echo `TZ=$TIMEZONE date +"%b %d %T"` $HOSTNAME watcher: status change
 	sendmail -t -f noreply@larrylang.net <<EOM
 From: noreply@larrylang.net
 To: $WATCHEMAIL
-Subject: [watcher] $WATCHNODE $STATUS
+Subject: [watcher] $WATCHNODE $STATUS $UPDATE
 
-$WATCHNODE $STATUS
+$WATCHNODE $STATUS $UPDATE
 EOM
 fi
 
