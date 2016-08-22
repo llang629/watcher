@@ -43,7 +43,6 @@ then
 else
     UPDATE=""
 fi
-echo watcher: today is $TODAY, recentday is $RECENTDAY, so update is $UPDATE
 
 echo `TZ=$TIMEZONE date +"%b %d %T"` $HOSTNAME watcher: $WATCHNODE $STATUS $UPDATE
 
