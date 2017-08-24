@@ -18,6 +18,7 @@ then
 	echo `date +"[%Y-%m-%d %H:%M:%S]"`" Restarting VPN"
 	sudo killall pppd
 	sudo pppd call $WATCHCONNECT
+	sleep 30
 fi
 
 sleep $WATCHINTERVAL
