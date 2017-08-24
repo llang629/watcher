@@ -2,7 +2,6 @@
 WATCHNODE=$1
 
 # parameters
-WATCHCONNECT=llang-pptp
 WATCHEMAIL=watcher@larrylang.net
 WATCHINTERVAL=300
 TIMEZONE="America/Los_Angeles"
@@ -15,16 +14,6 @@ UPDATE=""
 # repeat until interrupted
 while true
 do
-
-# pptp connect (and if necessary reconnect)
-# set up via
-# http://www.cyberciti.biz/tips/howto-configure-ubuntu-fedora-linux-pptp-client.html
-if ! ifconfig | grep -q ppp0
-then
-	sudo killall pppd
-	sudo pppd call $WATCHCONNECT
-	sleep 10
-fi
 
 # ping test
 ping -c 3 $WATCHNODE >/dev/null 2>&1
