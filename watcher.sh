@@ -3,7 +3,7 @@ WATCHNODE=$1
 
 # parameters
 WATCHEMAIL=watcher@larrylang.net
-WATCHINTERVAL=3 #00
+WATCHINTERVAL=300
 TIMEZONE="America/Los_Angeles"
 
 # initialize variables
