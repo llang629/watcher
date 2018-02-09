@@ -3,17 +3,19 @@ WATCHNODE=$1
 
 # parameters
 WATCHEMAIL=watcher@larrylang.net
-WATCHINTERVAL=300
+WATCHINTERVAL=3 #00
 TIMEZONE="America/Los_Angeles"
 
 # initialize variables
-PREVSTATUS=="start"
+PREVSTATUS="start"
+PREVIPADDRESS=""
 RECENTDAY=`TZ=$TIMEZONE date +%j`
-UPDATE=""
 
 # repeat until interrupted
 while true
 do
+
+UPDATE=""
 
 # ping test
 ping -c 3 $WATCHNODE >/dev/null 2>&1
@@ -24,16 +26,22 @@ else
 	STATUS="not responding"
 fi
 
+# nslookup to watch for changing IP address
+NSLOOKUP=`nslookup $WATCHNODE`
+IPADDRESS=`echo $NSLOOKUP | rev | cut -d " " -f 1 | rev`
+if [ "$IPADDRESS" != "$PREVIPADDRESS" ]
+then
+	UPDATE+="(new IP address)"
+fi
+
 # refresh each new day
 TODAY=`TZ=$TIMEZONE date +%j`
 if [ "$TODAY" != "$RECENTDAY" ]
 then
-	UPDATE="(daily update)"
-else
-    UPDATE=""
+	UPDATE+="(daily update)"
 fi
 
-echo `TZ=$TIMEZONE date +"%b %d %T"` $HOSTNAME watcher: $WATCHNODE $STATUS $UPDATE
+echo `TZ=$TIMEZONE date +"%b %d %T"` $HOSTNAME watcher: $WATCHNODE [$IPADDRESS] $STATUS $UPDATE
 
 # email when status changes or daily update
 # installed via
@@ -46,12 +54,13 @@ From: noreply@larrylang.net
 To: $WATCHEMAIL
 Subject: [watcher] $WATCHNODE $STATUS $UPDATE
 
-$WATCHNODE $STATUS $UPDATE
+$WATCHNODE [$IPADDRSS] $STATUS $UPDATE
 EOM
 fi
 
 # prepare for next iteration
 PREVSTATUS=$STATUS
+PREVIPADDRESS=$IPADDRESS
 RECENTDAY=$TODAY
 sleep $WATCHINTERVAL
 
