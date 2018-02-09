@@ -54,7 +54,7 @@ From: noreply@larrylang.net
 To: $WATCHEMAIL
 Subject: [watcher] $WATCHNODE $STATUS $UPDATE
 
-$WATCHNODE [$IPADDRSS] $STATUS $UPDATE
+$WATCHNODE [$IPADDRESS] $STATUS $UPDATE
 EOM
 fi
 
